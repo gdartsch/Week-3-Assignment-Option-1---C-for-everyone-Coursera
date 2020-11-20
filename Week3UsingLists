@@ -1,0 +1,101 @@
+/*
+List random generation and sort program
+
+by German Dartsch
+
+Last edited on Nov-20-2020
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+//we declare and define the struct we'll use
+typedef struct list{ int data; struct list *next; } list;
+
+int isEmpty(const list *l){return (l==NULL);}
+
+//this is the method to swap values used by the bubble sort function
+void swap(int *x, int *y) 
+{ 
+	//we store the values obtained as parameter, the first in a temporal value
+	int temp = *x; 
+	//the second in the place of the first
+	*x = *y; 
+	//and then we put the former fisrt in the second place, then the values are swaped
+	*y = temp; 
+} 
+
+//The bubble sort fuction 
+void bubbleSort(int nums[], int n) 
+{ 
+	//we declared the iterators to be used in the nested for loops
+	int i, j; 
+	//then run a the loops
+	for (i = 0; i < n-1; i++){     
+		for (j = 0; j < n-i-1; j++){
+			//if the current element is grater than the next one
+			if (nums[j] > nums[j+1]){
+				//the we swap
+				swap(&nums[j], &nums[j+1]);
+			}
+		}
+	}
+} 
+
+//This is the fuction to print the array in which we'll store the elements of the list to sort them
+void printArray(int nums[], int size) 
+{ 
+	//we declare the iterators to be used in the for loop
+	int i, j = 0; 
+	//then run a for loop and print each value
+	for (i=0; i < size; i++){ 
+		//we print each value
+		printf("%d ", nums[i]);
+		//and increment j
+		j++;
+		//every time j is 5
+		if(j == 5){
+			//we go to the next line
+			printf("\n");
+			//and re init j
+			j = 0;
+		}
+		
+	}
+}
+	
+//the main method
+int main(){
+	//first we declare an iterator
+	int i;
+	//and an array to store the list values to be sorted
+	int sortedData[100];
+	//we create the first element while allocating memory space and returning a pointer
+	list* head = malloc(sizeof(list));
+	//then initialize the next pointer
+	head -> next = NULL;
+	//the data pointer will store a random value between 0 and 100
+	head -> data = rand()%100;
+	//we also store that value in the cero index of the array
+	sortedData[0] = head -> data;
+	
+	//then repeat the process 99 times to populate the total of the 100 values requested
+	for(i = 1; i < 100; i++){
+		head -> next = malloc(sizeof(list));
+		head = head -> next;
+		head -> data = rand()%100;
+		sortedData[i] = head -> data;
+	}
+
+	//sort the array
+	bubbleSort(sortedData, 100);
+
+	printf("Sorted data:\n");
+	printArray(sortedData, 100);
+	//and leave another empty line
+	printf("\n\n");
+	
+	//As always, we finish the program by returning 0 as a convention to indicate the program finished its execution without issues
+	return 0;
+}
